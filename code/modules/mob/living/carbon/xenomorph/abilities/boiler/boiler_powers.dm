@@ -52,7 +52,7 @@
 
 			turfs_visited++
 
-			new /obj/effect/xenomorph/acid_damage_delay(T, damage, 7, FALSE, "You are blasted with a stream of high-velocity acid!", X)
+			new /obj/effect/xenomorph/acid_damage_delay(T, damage * X.ability_damage_multiplier, 7, FALSE, "You are blasted with a stream of high-velocity acid!", X)
 
 		X.visible_message(SPAN_XENODANGER("[X] fires a massive blast of acid at [A]!"), SPAN_XENODANGER("You fire a massive blast of acid at [A]!"))
 		remove_stack_effects("You feel your speed return to normal!")
@@ -245,10 +245,10 @@
 		acid_bolt_message = "a powerful bolt of acid"
 
 	X.visible_message(SPAN_XENODANGER("[X] fires " + acid_bolt_message + " at [A]!"), SPAN_XENODANGER("You fire " + acid_bolt_message + " at [A]!"))
-	new /obj/effect/xenomorph/acid_damage_delay/boiler_landmine(T, damage, delay, empowered, "You are blasted with " + acid_bolt_message + "!", X, )
+	new /obj/effect/xenomorph/acid_damage_delay/boiler_landmine(T, damage*X.ability_damage_multiplier, delay, empowered, "You are blasted with " + acid_bolt_message + "!", X, )
 
 	for (var/turf/targetTurf in orange(1, T))
-		new /obj/effect/xenomorph/acid_damage_delay/boiler_landmine(targetTurf, damage, delay, empowered, "You are blasted with a " + acid_bolt_message + "!", X)
+		new /obj/effect/xenomorph/acid_damage_delay/boiler_landmine(targetTurf, damage*X.ability_damage_multiplier, delay, empowered, "You are blasted with a " + acid_bolt_message + "!", X)
 
 	if(empowered)
 		empowered = FALSE
@@ -276,7 +276,7 @@
 
 	var/datum/ammo/ammoDatum = new ammo_type()
 
-	P.generate_bullet(ammoDatum)
+	P.generate_bullet(ammoDatum, bonus_damage = (ammoDatum.damage * X.ability_damage_multiplier - ammoDatum.damage) * (1+ammoDatum.bonus_projectiles_amount))
 
 	P.fire_at(target, X, X, ammoDatum.max_range, ammoDatum.shell_speed)
 

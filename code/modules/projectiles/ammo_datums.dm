@@ -77,6 +77,10 @@
 	return
 
 /datum/ammo/proc/on_hit_mob(mob/M, obj/item/projectile/P, mob/user) //Special effects when hitting mobs.
+	if(isXeno(user))
+		var/mob/living/carbon/Xenomorph/firer = user
+		if(damage_type == BURN)
+			firer.gain_upgrade_points(UPGRADE_FLAG_BURN_DAMAGE, P.damage)
 	return
 
 ///Special effects when pointblanking mobs. Ultimately called from /living/attackby(). Return TRUE to end the PB attempt.

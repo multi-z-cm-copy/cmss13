@@ -263,13 +263,16 @@
 
 	var/hivenumber = XENO_HIVE_NORMAL
 	var/gas_damage = 20
+	var/mob/living/carbon/Xenomorph/source_xeno
 
 /obj/effect/particle_effect/smoke/xeno_burn/Initialize(mapload, amount, datum/cause_data/cause_data)
-	var/mob/living/carbon/Xenomorph/X = cause_data.resolve_mob()
-	if (istype(X) && X.hivenumber)
-		hivenumber = X.hivenumber
+	source_xeno = cause_data.resolve_mob()
+	if (istype(source_xeno) && source_xeno.hivenumber)
+		hivenumber = source_xeno.hivenumber
 
 		set_hive_data(src, hivenumber)
+
+		gas_damage = gas_damage * source_xeno.ability_damage_multiplier
 
 	. = ..()
 
@@ -280,7 +283,7 @@
 		B.take_acid_damage(XENO_ACID_BARRICADE_DAMAGE)
 
 	for(var/obj/vehicle/multitile/R in T)
-		R.take_damage_type(20, "acid")
+		R.take_damage_type(gas_damage, "acid")
 
 	for(var/obj/structure/machinery/m56d_hmg/auto/H in T)
 		H.update_health(XENO_ACID_HMG_DAMAGE)
@@ -307,9 +310,11 @@
 	M.apply_damage(3, OXY) //Basic oxyloss from "can't breathe"
 
 	if(isXeno(M))
-		M.apply_damage(gas_damage * XVX_ACID_DAMAGEMULT, BURN) //Inhalation damage
+		M.apply_damage(gas_damage * XVX_ACID_DAMAGEMULT * source_xeno.ability_damage_multiplier, BURN) //Inhalation damage
+		source_xeno.gain_upgrade_points(UPGRADE_FLAG_BURN_DAMAGE, gas_damage * XVX_ACID_DAMAGEMULT * source_xeno.ability_damage_multiplier)
 	else
-		M.apply_damage(gas_damage, BURN) //Inhalation damage
+		M.apply_damage(gas_damage * source_xeno.ability_damage_multiplier, BURN) //Inhalation damage
+		source_xeno.gain_upgrade_points(UPGRADE_FLAG_BURN_DAMAGE, gas_damage * source_xeno.ability_damage_multiplier)
 
 	if(M.coughedtime != 1 && !M.stat && ishuman(M)) //Coughing/gasping
 		M.coughedtime = 1
@@ -323,7 +328,9 @@
 	to_chat(M, SPAN_DANGER("Your skin feels like it is melting away!"))
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		H.apply_armoured_damage(amount*rand(15, 20), ARMOR_BIO, BURN) //Burn damage, randomizes between various parts //Amount corresponds to upgrade level, 1 to 2.5
+		var/dam = amount*rand(15, 20)*source_xeno.ability_damage_multiplier
+		H.apply_armoured_damage(dam, ARMOR_BIO, BURN) //Burn damage, randomizes between various parts //Amount corresponds to upgrade level, 1 to 2.5
+		source_xeno.gain_upgrade_points(UPGRADE_FLAG_BURN_DAMAGE, dam)
 	else
 		M.burn_skin(5) //Failsafe for non-humans
 	M.updatehealth()

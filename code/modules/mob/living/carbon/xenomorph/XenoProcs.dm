@@ -24,6 +24,11 @@
 /proc/xeno_message_all(var/message = null, var/size = 3)
 	xeno_message(message, size)
 
+/mob/living/carbon/Xenomorph/proc/upgrade_possible()
+	if(upgrade == XENO_UPGRADE_FOUR)
+		return FALSE
+	return TRUE
+
 //Adds stuff to your "Status" pane -- Specific castes can have their own, like carrier hugger count
 //Those are dealt with in their caste files.
 /mob/living/carbon/Xenomorph/get_status_tab_items()
@@ -67,8 +72,13 @@
 			else if(!(hive.living_xeno_queen.ovipositor || hive.evolution_without_ovipositor))
 				evolve_progress += " (NO OVIPOSITOR)"
 
+	if(upgrade_possible())
+		. += "Upgrade Progress: [round(upgrade_stored)]/[caste.upgrade_threshold]"
+
 	if(evolve_progress)
 		. += "Evolve Progress: [evolve_progress]"
+
+
 
 	. += ""
 

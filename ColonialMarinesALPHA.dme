@@ -1594,7 +1594,6 @@
 #include "code\modules\mob\living\carbon\xenomorph\XenoMutatorSets.dm"
 #include "code\modules\mob\living\carbon\xenomorph\XenoOverwatch.dm"
 #include "code\modules\mob\living\carbon\xenomorph\XenoProcs.dm"
-#include "code\modules\mob\living\carbon\xenomorph\XenoUpgrade.dm"
 #include "code\modules\mob\living\carbon\xenomorph\abilities\ability_helper_procs.dm"
 #include "code\modules\mob\living\carbon\xenomorph\abilities\ability_macro_framework.dm"
 #include "code\modules\mob\living\carbon\xenomorph\abilities\general_abilities.dm"

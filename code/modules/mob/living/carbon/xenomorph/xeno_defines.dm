@@ -105,6 +105,10 @@
 	var/list/resin_build_order
 	var/minimum_xeno_playtime = 0
 
+	var/upgrade_threshold = 0					// Upgrade points required for the next upgrade
+	var/upgrade_flags	  = 0					// What kind of tasks can this caste do for upgrade points
+	var/next_upgrade_name
+	var/upgrade_progression_multiplier = 1
 
 /datum/caste_datum/can_vv_modify()
 	return FALSE
@@ -160,6 +164,12 @@
 
 /datum/caste_datum/proc/get_caste_requirement(var/client/client)
 	return minimum_xeno_playtime - client.get_total_xeno_playtime()
+
+/datum/upgrade_datum // Stores changes for upgrades, Similar to strains
+	var/upgrade_name
+	var/upgrade_level
+	var/ability_damage_multiplier_modifier = 0
+	var/next_upgrade_name
 
 /datum/hive_status
 	var/name = "Normal Hive"

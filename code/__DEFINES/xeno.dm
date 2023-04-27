@@ -152,6 +152,19 @@
 /// Between 2% to 10% of explosion severity
 #define WEED_EXPLOSION_DAMAGEMULT rand(2, 10)*0.01
 
+
+// Upgrade levels
+#define XENO_UPGRADE_ZERO	0 	// Young
+#define XENO_UPGRADE_ONE  	1	// Mature
+#define XENO_UPGRADE_TWO  	2	// Elder
+#define XENO_UPGRADE_THREE 	3	// Ancient
+#define XENO_UPGRADE_FOUR  	4	// Primordial
+
+// Upgrade flags
+#define UPGRADE_FLAG_BURN_DAMAGE (1<<0)
+
+
+
 /////////////////////////////////////////////////////////////////////////////////////
 //
 //	Stat Baselines

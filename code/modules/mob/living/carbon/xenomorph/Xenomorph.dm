@@ -222,7 +222,10 @@
 	/// The damage dealt by a xeno whenever they take damage near someone
 	var/acid_blood_damage = 25
 	var/nocrit = FALSE
-
+	var/upgrade_stored    = 0					// Upgrade progress stored
+	var/ability_damage_multiplier = 1			// Damage multiplier for abilities
+	var/upgrade           = XENO_UPGRADE_ZERO   // Current upgrade
+	var/datum/upgrade_datum/next_upgrade		// The next upgrade
 
 	//////////////////////////////////////////////////////////////////
 	//
@@ -334,6 +337,8 @@
 
 	if(caste_type && GLOB.xeno_datum_list[caste_type])
 		caste = GLOB.xeno_datum_list[caste_type]
+		if(caste.next_upgrade_name)
+			next_upgrade = GLOB.xeno_upgrade_datum_list[caste.next_upgrade_name]
 	else
 		to_world("something went very wrong")
 		return
@@ -521,8 +526,6 @@
 	if(client)
 		name_client_prefix = "[(client.xeno_prefix||client.xeno_postfix) ? client.xeno_prefix : "XX"]-"
 		name_client_postfix = client.xeno_postfix ? ("-"+client.xeno_postfix) : ""
-
-		age_xeno()
 	color = in_hive.color
 
 	//Queens have weird, hardcoded naming conventions based on age levels. They also never get nicknumbers
@@ -1001,3 +1004,56 @@
 	if(locate(/obj/effect/alien/resin/special/pool) in range(2, get_turf(src)))
 		return
 	return ..()
+
+
+/mob/living/carbon/Xenomorph/proc/upgrade_xeno()
+	var/datum/upgrade_datum/upgrade_next = next_upgrade
+
+	if(upgrade_next.upgrade_level == upgrade)
+		return
+
+	upgrade_stored = 0
+	ability_damage_multiplier += upgrade_next.ability_damage_multiplier_modifier
+	upgrade = upgrade_next.upgrade_level
+	if(GLOB.xeno_upgrade_datum_list[upgrade_next.next_upgrade_name])
+		next_upgrade = GLOB.xeno_upgrade_datum_list[upgrade_next.next_upgrade_name]
+
+	switch(upgrade)
+		if(XENO_UPGRADE_ZERO)
+			age_prefix = ""
+			age = XENO_NORMAL
+		if(XENO_UPGRADE_ONE)
+			age_prefix = "Mature "
+			age = XENO_MATURE
+		if(XENO_UPGRADE_TWO)
+			age_prefix = "Elder "
+			age = XENO_ELDER
+		if(XENO_UPGRADE_THREE)
+			age_prefix = "Ancient "
+			age = XENO_ANCIENT
+		if(XENO_UPGRADE_FOUR)
+			age_prefix = "Prime "
+			age = XENO_PRIME
+
+
+	xeno_jitter(1 SECONDS)
+	hud_update()
+	recalculate_everything()
+
+/mob/living/carbon/Xenomorph/proc/gain_upgrade_points(type, severity)
+	if(!src.caste.upgrade_flags & type)
+		return
+
+	var/maturity_progress_multiplier = 1
+	var/progress = 0
+
+	maturity_progress_multiplier /= upgrade + 1
+
+	switch(type)
+		if(UPGRADE_FLAG_BURN_DAMAGE)
+			progress += (severity / 20)
+
+	src.upgrade_stored += progress * src.caste.upgrade_progression_multiplier * maturity_progress_multiplier
+
+	if(src.upgrade_stored >= src.caste.upgrade_threshold)
+		upgrade_xeno()

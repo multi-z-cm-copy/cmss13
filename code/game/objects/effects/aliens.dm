@@ -371,6 +371,7 @@
 	// Hopefully we don't get insantiated in these places anyway..
 	if (isXeno(source_xeno))
 		src.source_xeno = source_xeno
+		damage = damage * src.source_xeno.ability_damage_multiplier
 
 	if (isturf(loc))
 		var/turf/T = loc
@@ -401,6 +402,7 @@
 			if(source_xeno.can_not_harm(H))
 				continue
 			H.apply_armoured_damage(damage, ARMOR_BIO, BURN)
+			source_xeno.gain_upgrade_points(UPGRADE_FLAG_BURN_DAMAGE, damage)
 			animation_flash_color(H)
 			to_chat(H, SPAN_XENODANGER("You are scalded by acid as a massive glob explodes nearby!"))
 
@@ -478,6 +480,7 @@
 
 		if(isXeno(H))
 			H.apply_armoured_damage(damage * XVX_ACID_DAMAGEMULT * xeno_empower_modifier, ARMOR_BIO, BURN)
+			linked_xeno?.gain_upgrade_points(UPGRADE_FLAG_BURN_DAMAGE, damage * XVX_ACID_DAMAGEMULT * xeno_empower_modifier)
 		else
 			if(empowered)
 				new /datum/effects/acid(H, linked_xeno, initial(linked_xeno.caste_type))
@@ -488,8 +491,10 @@
 					break
 			if(found)
 				H.apply_armoured_damage(damage*immobilized_multiplier, ARMOR_BIO, BURN)
+				linked_xeno?.gain_upgrade_points(UPGRADE_FLAG_BURN_DAMAGE, damage * immobilized_multiplier)
 			else
 				H.apply_armoured_damage(damage, ARMOR_BIO, BURN)
+				linked_xeno?.gain_upgrade_points(UPGRADE_FLAG_BURN_DAMAGE, damage)
 
 		if (message)
 			to_chat(H, SPAN_XENODANGER(message))

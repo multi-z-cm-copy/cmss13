@@ -27,6 +27,22 @@
 	tacklestrength_min = 3
 	tacklestrength_max = 4
 
+	upgrade_threshold = 300
+	upgrade_flags = UPGRADE_FLAG_BURN_DAMAGE
+	next_upgrade_name = "Boiler Mature"
+
+
+/datum/upgrade_datum/boiler_mature
+	upgrade_name = "Boiler Mature"
+	next_upgrade_name = "Boiler Elder"
+	ability_damage_multiplier_modifier = 0.1
+	upgrade_level = XENO_UPGRADE_ONE
+
+/datum/upgrade_datum/boiler_elder
+	upgrade_name = "Boiler Elder"
+	ability_damage_multiplier_modifier = 0.1
+	upgrade_level = XENO_UPGRADE_TWO
+
 /mob/living/carbon/Xenomorph/Boiler
 	caste_type = XENO_CASTE_BOILER
 	name = XENO_CASTE_BOILER
