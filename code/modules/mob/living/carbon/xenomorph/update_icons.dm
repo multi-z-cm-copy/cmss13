@@ -276,10 +276,10 @@
 	apply_overlay(X_SUIT_LAYER)
 	addtimer(CALLBACK(src, PROC_REF(remove_overlay), X_SUIT_LAYER), 2 SECONDS)
 
-/mob/living/carbon/xenomorph/proc/create_shield(duration = 10)
+/mob/living/carbon/xenomorph/proc/create_shield(duration = 10, iconstate)
 	remove_suit_layer()
 
-	overlays_standing[X_SUIT_LAYER] = image("icon"='icons/mob/xenos/overlay_effects64x64.dmi', "icon_state" = "shield2")
+	overlays_standing[X_SUIT_LAYER] = image("icon"='icons/mob/xenos/overlay_effects64x64.dmi', "icon_state" = iconstate)
 	apply_overlay(X_SUIT_LAYER)
 	addtimer(CALLBACK(src, PROC_REF(remove_overlay), X_SUIT_LAYER), duration)
 
@@ -340,8 +340,6 @@
 			wound_icon_holder.icon_state = "[caste.caste_type]_walk_[health_threshold]"
 		else
 			wound_icon_holder.icon_state = handle_special_wound_states(health_threshold)
-	if(organ_removed)
-		wound_icon_holder.icon_state = "[caste.caste_type]_dissection"
 
 ///Used to display the xeno wounds/backpacks without rapidly switching overlays
 /atom/movable/vis_obj

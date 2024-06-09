@@ -130,9 +130,7 @@
 
 	// subtract the threshold, keep the stored amount
 	evolution_stored -= evolution_threshold
-	var/obj/item/organ/xeno/organ = locate() in src
-	if(!isnull(organ))
-		qdel(organ)
+
 	//From there, the new xeno exists, hopefully
 	var/mob/living/carbon/xenomorph/new_xeno = new M(get_turf(src), src)
 
@@ -195,6 +193,8 @@
 	if(new_xeno.mind && GLOB.round_statistics)
 		GLOB.round_statistics.track_new_participant(new_xeno.faction, -1) //so an evolved xeno doesn't count as two.
 	SSround_recording.recorder.track_player(new_xeno)
+
+	SEND_SIGNAL(src, COMSIG_XENO_EVOLVE_TO_NEW_CASTE, new_xeno)
 
 /mob/living/carbon/xenomorph/proc/evolve_checks()
 	if(!check_state(TRUE))
@@ -332,9 +332,7 @@
 			xeno_type = /mob/living/carbon/xenomorph/defender
 		if(XENO_CASTE_BURROWER)
 			xeno_type = /mob/living/carbon/xenomorph/burrower
-	var/obj/item/organ/xeno/organ = locate() in src
-	if(!isnull(organ))
-		qdel(organ)
+
 	var/mob/living/carbon/xenomorph/new_xeno = new xeno_type(get_turf(src), src)
 
 	new_xeno.built_structures = built_structures.Copy()

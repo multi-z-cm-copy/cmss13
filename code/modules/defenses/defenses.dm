@@ -138,11 +138,11 @@
 	switch(selection)
 		if(FACTION_MARINE)
 			faction_group = FACTION_LIST_MARINE
-		if(SENTRY_FACTION_WEYLAND)
+		if(FACTION_WEYLAND)
 			faction_group = FACTION_LIST_MARINE_WY
-		if(SENTRY_FACTION_HUMAN)
+		if(FACTION_HUMAN)
 			faction_group = FACTION_LIST_HUMANOID
-		if(SENTRY_FACTION_COLONY)
+		if(FACTION_COLONY)
 			faction_group = list(FACTION_MARINE, FACTION_COLONIST)
 
 

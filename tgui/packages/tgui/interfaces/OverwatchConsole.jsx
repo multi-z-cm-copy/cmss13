@@ -763,7 +763,7 @@ const SavedCoordinates = (props) => {
               <Input
                 width="100%"
                 value={coords.comment}
-                onChange={(e, value) =>
+                onChange={(value) =>
                   act('change_coordinate_comment', {
                     comment: value,
                     index: coords.index,

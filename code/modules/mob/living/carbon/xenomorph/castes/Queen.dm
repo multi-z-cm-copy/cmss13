@@ -270,7 +270,6 @@
 	hive_pos = XENO_QUEEN
 	small_explosives_stun = FALSE
 	pull_speed = 3 //screech/neurodragging is cancer, at the very absolute least get some runner to do it for teamwork
-	organ_value = 8000 // queen is expensive
 
 	icon_xeno = 'icons/mob/xenos/queen.dmi'
 	icon_xenonid = 'icons/mob/xenonids/queen.dmi'
@@ -360,10 +359,6 @@
 
 /mob/living/carbon/xenomorph/queen/can_destroy_special()
 	return TRUE
-
-
-/mob/living/carbon/xenomorph/queen/get_organ_icon()
-	return "heart_t3"
 
 /mob/living/carbon/xenomorph/queen/corrupted
 	hivenumber = XENO_HIVE_CORRUPTED
@@ -537,6 +532,7 @@
 
 	. += "Pooled Larvae: [stored_larvae]"
 	. += "Leaders: [xeno_leader_num] / [hive?.queen_leader_limit]"
+	. += "Royal Resin: [hive?.buff_points]"
 	if(queen_age_timer_id != TIMER_ID_NULL)
 		var/time_left = time2text(timeleft(queen_age_timer_id) + 1 MINUTES, "mm") // We add a minute so that it basically ceilings the value.
 		. += "Maturity: [time_left == 1? "[time_left] minute" : "[time_left] minutes"] remaining"

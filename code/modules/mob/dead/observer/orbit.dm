@@ -118,7 +118,6 @@
 					var/datum/caste_datum/caste = xeno.caste
 					serialized["caste"] = caste.caste_type
 					serialized["icon"] = caste.minimap_icon
-					serialized["hivenumber"] = xeno.hivenumber
 				xenos += list(serialized)
 				continue
 
