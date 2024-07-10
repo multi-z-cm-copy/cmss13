@@ -57,6 +57,7 @@
 	build_speed_mod = 1
 
 	var/boosted = FALSE
+	range_limited = FALSE
 
 /datum/action/xeno_action/activable/secrete_resin/remote/queen/give_to(mob/L)
 	. = ..()

@@ -52,6 +52,8 @@
 
 	var/care_about_adjacency = TRUE
 	build_speed_mod = 2 // the actual building part takes twice as long
+	var/range_limited = TRUE
+	var/range = 10
 
 	macro_path = /datum/action/xeno_action/verb/verb_coerce_resin
 	action_type = XENO_ACTION_CLICK
@@ -71,7 +73,7 @@
 	if(!target_turf)
 		return
 	
-	if(!(target_turf in view(10, owner)))
+	if(range_limited && !(target_turf in view(range, owner)))
 		to_chat(owner, SPAN_XENONOTICE("We must have a direct line of sight!"))
 		return
 
